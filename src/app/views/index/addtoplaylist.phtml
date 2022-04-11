@@ -1,0 +1,18 @@
+<div class="container">
+    <h1 class="text-center text-primary">Select playlist</h1>
+    <form method="POST" class="w-50 m-auto mt-5">
+        <div class="mt-3">
+            <label for="playlistId">Choose playlist to add song</label>
+            <select name="playlistId" class="form-select" aria-label="Default select example">
+            <option value=""></option>
+                <?php
+                foreach ($playlists as $k=>$v) {
+                    echo '<option value="'.$v.'">'.$k.'</option>';
+                }
+                ?>
+                
+            </select>
+        </div>
+        <button class="btn btn-primary mt-3" type="submit">Add playlist</button>
+    </form>
+</div>

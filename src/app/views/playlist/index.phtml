@@ -1,0 +1,24 @@
+<div class="container">
+    <?php
+    if (isset($playlists)) {
+        echo '<div id="" class="row mt-3">
+                <h3 class="text-info text-center">My Playlists</h3>';
+        foreach ($playlists['items'] as $v) {
+            echo '<div class="col mt-3">
+                <div class="card shadow" style="width: 18rem;">
+                <img src="'.$v['images'][0]['url'].'" class="card-img-top border" alt="'.$v['name'].'" height="250px">
+                <div class="card-body">
+                        <h5 class="card-title">' . $v['name'] . '</h5>
+                        <p>Owner:  &nbsp;'.$v['owner']['display_name'].'</p>
+                        <p>Description:  &nbsp;'.$v['description'].'</p>
+                        <a class="btn btn-sm btn-outline-success" href="'.$v['external_urls']['spotify'].'">View on spotify</a> 
+                        <a class="btn btn-sm btn-outline-primary mx-2" href="/playlist/details/'.$v['id'].'">Details</a>
+                </div>
+                </div>
+            </div>';
+        }
+        echo '</div>';
+    }
+    
+    ?>
+</div>

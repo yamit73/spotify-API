@@ -5,7 +5,8 @@ use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Url;
-
+use Phalcon\Session\Manager;
+use Phalcon\Session\Adapter\Stream;
 use GuzzleHttp\Client;
 /**
  * Required classes for DB
@@ -80,13 +81,30 @@ $container->set(
     function() {
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => '',
+            'base_uri' => 'https://api.spotify.com/v1/',
         ]);
         return $client;
     },
     true
 );
 
+/**
+ * Session di
+ */
+$container->setShared(
+    'session',
+    function () {
+        $session = new Manager();
+        $files = new Stream(
+            [
+                'savePath' => '/tmp',
+            ]
+        );
+        $session->setAdapter($files);
+        $session->start();
+        return $session;
+    }
+);
 //Creating object of application class
 $application = new Application($container);
 

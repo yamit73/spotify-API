@@ -1,0 +1,41 @@
+<div class="container">
+    <h1 class="text-primary text-center mt-4">Playlist details</h1>
+    <div class=" m-auto">
+        <table class="table table-hover">
+            <thead class="bg-dark text-light">
+                <tr>
+                    <th scope="col">#Title</th>
+                    <th scope="col">Play</th>
+                    <th scope="col">Album</th>
+                    <th scope="col">Artists</th>
+                    <th scope="col">Date added</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($tracks['items'] as $track) {
+                    $artists='';
+                    foreach ($track['track']['artists'] as $art) {
+                        $artists .= $art['name'].', ';
+                    } 
+                    echo '<tr>
+                            <th scope="row">
+                                <img class="img-thumbnail" src="'.$track['track']['album']['images'][2]['url'].'">
+                                <small>'.$track['track']['name'].'</small>
+                            </th>
+                            <td><audio controls><source src="'.$track['track']['preview_url'].'" type="audio/mpeg"> </audio></td>
+                            <td>'.$track['track']['album']['name'].'</td>
+                            <td>'.$artists.'</td>
+                            <td>'.$track['added_at'].'</td>
+                            <td>'.$track['track']['duration_ms'].'</td>
+                            <td><a href="/playlist/removeTrack/'.$track['track']['id'].'?playlistId='.$tracks['playlistId'].'">remove</a></td>
+                        </tr>';
+                }
+                ?>
+                
+            </tbody>
+        </table>
+    </div>
+</div>

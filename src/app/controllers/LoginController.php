@@ -36,7 +36,7 @@ class LoginController extends Controller
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Authorization' => 'Basic '.base64_encode($clientId.":".$secret)
                 ];  
-                //New client to post data
+                //New client to post data to 
                 $client = new Client([
                     // Base URI is used with relative requests
                     'base_uri' => 'https://accounts.spotify.com',
@@ -47,7 +47,11 @@ class LoginController extends Controller
                 
                 //Sending post request to get the APi token
                 $token=$client->request('POST', '/api/token', ['form_params'=>$urlQuery]);
-                echo $token->getBody();die;
+                // var_dump($token->getBody());die;
+
+                $res=json_decode($token->getBody(), true);
+                $this->session->access=$res;
+                $this->response->redirect('/');
             }
         }
     }
