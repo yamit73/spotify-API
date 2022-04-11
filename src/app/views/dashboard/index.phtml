@@ -1,0 +1,13 @@
+<h1>Dashboard</h1>
+<h2>Welcome, <span class="text-success"><?php echo $this->session->name; ?></span></h2>
+<form method="POST" action="/connect">
+        <button class="btn btn-success rounded" type="submit">Connect Spotify</button>
+</form>
+<?php
+    echo $this->tag->linkTo(
+        [
+            '/users/login/logout',
+            'Logout!',
+            'class'=>'btn btn-warning'
+        ]
+    );

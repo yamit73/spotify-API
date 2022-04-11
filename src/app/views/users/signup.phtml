@@ -1,0 +1,67 @@
+<div class="text-center container">
+    <main class="form-signin w-25 m-auto">
+
+        <?php echo $this->tag->form('/users/signup'); ?>
+        <i class="bi bi-person-circle mb-4 login-icon"></i>
+        <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+        <div class="form-floating mt-3">
+            <?php
+            echo $this->tag->textField(
+                [
+                    "name",
+                    'class' => 'form-control'
+                ]
+            );
+            ?>
+            <label for="name">Full Name</label>
+        </div>
+        <div class="form-floating mt-3">
+            <?php
+            echo $this->tag->emailField(
+                [
+                    "email",
+                    'class' => 'form-control'
+                ]
+            );
+            ?>
+            <label for="email">E-Mail</label>
+        </div>
+        <div class="form-floating mt-3">
+            <?php
+            echo $this->tag->passwordField(
+                [
+                    "password",
+                    'class' => 'form-control'
+                ]
+            );
+            ?>
+            <label for="password">Password</label>
+        </div>
+        <div class="form-floating mt-3">
+            <?php
+            echo $this->tag->passwordField(
+                [
+                    "confirmPassword",
+                    'class' => 'form-control'
+                ]
+            );
+            ?>
+            <label for="confirmPassword">Confirm Password</label>
+        </div>
+        <?php
+        echo $this->tag->submitButton(
+            [
+                "Register",
+                'class' => 'w-100 btn btn-lg btn-primary mt-3'
+            ]
+        );
+        ?>
+        <div class="mb-3 mt-4">
+            <label>
+            Already have an account <a href="/users/login">login</a>
+            </label>
+        </div>
+        </form>
+    </main>
+</div>
+<div class="alert alert-danger w-50 m-auto"><?php if (isset($message))echo $message; ?></div>

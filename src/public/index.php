@@ -5,6 +5,7 @@ use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Url;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
 use GuzzleHttp\Client;
@@ -35,6 +36,12 @@ $loader->registerDirs(
     ]
 );
 
+//register namespaces
+$loader->registerNamespaces(
+    [
+        'App\Components' => APP_PATH.'/components'
+    ]
+);
 $loader->register();
 
 $container = new FactoryDefault();
@@ -103,6 +110,21 @@ $container->setShared(
         $session->setAdapter($files);
         $session->start();
         return $session;
+    }
+);
+//container for database connection
+$container->set(
+    'db',
+    function () {
+        $config=$this->get('config')->db;
+        return new Mysql(
+            [
+                'host'     => $config->host,
+                'username' => $config->username,
+                'password' => $config->password,
+                'dbname'   => $config->dbname,
+            ]
+        );
     }
 );
 //Creating object of application class

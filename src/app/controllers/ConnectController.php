@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 /**
  * Class to simple connect account of spotify
  */
-class LoginController extends Controller
+class ConnectController extends Controller
 {
     /**
      * function
@@ -16,18 +16,19 @@ class LoginController extends Controller
      */  
     public function indexAction()
     {
+        // die('connect');
         //Getting authorise code from url
         $code=$this->request->getQuery('code');
         if ($this->request->isPost() || isset($code)) {
             $clientId=$this->di->get('config')->get('app')->get('clientId');
             $secret=$this->di->get('config')->get('app')->get('secret');
             //Redirct url for spotify API
-            $redirectUri='http://localhost:8080/login';
+            $redirectUri='http://localhost:8080/connect';
 
             //Defining the scope of authorisation
-            $scope='playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private';
+            $scope='playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private user-read-email user-read-private';
             //Sending request to the spotify authorise API to get authorise code
-            $this->response->redirect('https://accounts.spotify.com/authorize?response_type=code&client_id='.$clientId.'&scope='.$scope.'&redirect_uri='.$redirectUri.'');
+            $this->response->redirect('https://accounts.spotify.com/authorize?response_type=code&client_id='.$clientId.'&scope='.$scope.'&redirect_uri='.$redirectUri.'&show_dialog=true');
             
             //Check if authorise code set
             if ($code){
@@ -47,9 +48,13 @@ class LoginController extends Controller
                 
                 //Sending post request to get the APi token
                 $token=$client->request('POST', '/api/token', ['form_params'=>$urlQuery]);
-                // var_dump($token->getBody());die;
-
                 $res=json_decode($token->getBody(), true);
+                //insert token into database
+                $user=Users::findFirst($this->session->id);
+                $user->access_token= $res['access_token'];
+                $user->refresh_token= $res['refresh_token'];
+                $user->save();
+                
                 $this->session->access=$res;
                 $this->response->redirect('/');
             }
