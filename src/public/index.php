@@ -8,6 +8,8 @@ use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
 use GuzzleHttp\Client;
 /**
  * Required classes for DB
@@ -39,7 +41,8 @@ $loader->registerDirs(
 //register namespaces
 $loader->registerNamespaces(
     [
-        'App\Components' => APP_PATH.'/components'
+        'App\Components' => APP_PATH.'/components',
+        'App\Events' => APP_PATH.'/events'
     ]
 );
 $loader->register();
@@ -129,7 +132,21 @@ $container->set(
 );
 //Creating object of application class
 $application = new Application($container);
-
+//Event manager
+$eventsManager=new EventsManager();
+$eventsManager->attach(
+    'events',
+    new App\Events\EventListener()
+);
+$application->setEventsManager($eventsManager);
+$eventsManager->attach(
+    'application:getAccessTokenUsingRefresh',
+    new App\Events\EventListener()
+);
+$container->set(
+    'EventsManager',
+    $eventsManager
+);
 try {
     // Handle the request
     $response = $application->handle(

@@ -1,13 +1,51 @@
-<h1>Dashboard</h1>
-<h2>Welcome, <span class="text-success"><?php echo $this->session->name; ?></span></h2>
-<form method="POST" action="/connect">
-        <button class="btn btn-success rounded" type="submit">Connect Spotify</button>
-</form>
+<h2 class="text-center text-primary">My Profile</h2>
+<div class="w-50 m-auto mt-5">
+    <form>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" name="name" value="<?php echo $userDetails['display_name'] ?>" placeholder="name" disabled>
+            <label for="name">User Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" name="email" value="<?php echo $userDetails['email'] ?>" placeholder="name@example.com" disabled>
+            <label for="email">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control" name="id" value="<?php echo $userDetails['id'] ?>" placeholder="Password" disabled>
+            <label for="id">ID</label>
+        </div>
+        <button class="btn btn-primary mt-3 px-5" type="submit" disabled>Edit</button>
+    </form>
+    <a href="<?php echo $userDetails['external_urls']['spotify'] ?>" class="text-center mt-5 btn btn-success">Vie on Spotify</a>
+</div>
+<hr>
+<h2 class="text-center text-primary">Recommendations</h2>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <?php
+        foreach ($recommendation['tracks'] as $rec) {
+            $artists = '';
+            foreach ($rec['artists'] as $art) {
+                $artists .= $art['name'] . ', ';
+            }
+            echo '<div class="col">
+                    <div class="card">
+                        <img src="' . $rec['album']['images'][0]['url'] . '" class="card-img-top img-thumbnail" width="250" height="250" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">' . $rec['album']['name'] . '</h5>
+                            <p class="card-text">Artists  :' . $artists . '</p>';
+            if (isset($rec['album']['preview_url'])) {
+                echo '<audio controls><source src="' . $rec['album']['preview_url'] . '" type="audio/mpeg"> </audio>';
+            }
+            echo '<a href="' . $rec['album']['external_urls']['spotify'] . '" class="btn btn-sm btn-success">Play on spotify</a>
+            </div>
+        </div>
+    </div>';
+        }
+        ?>
+
+    </div>
+</div>
 <?php
-    echo $this->tag->linkTo(
-        [
-            '/users/login/logout',
-            'Logout!',
-            'class'=>'btn btn-warning'
-        ]
-    );
+echo '<pre>';
+print_r($recommendation['tracks']);

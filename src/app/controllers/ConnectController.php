@@ -16,7 +16,9 @@ class ConnectController extends Controller
      */  
     public function indexAction()
     {
-        // die('connect');
+        if (!$this->session->id) {
+            $this->response->redirect('/users/login');
+        }
         //Getting authorise code from url
         $code=$this->request->getQuery('code');
         if ($this->request->isPost() || isset($code)) {
@@ -56,7 +58,7 @@ class ConnectController extends Controller
                 $user->save();
                 
                 $this->session->access=$res;
-                $this->response->redirect('/');
+                $this->response->redirect('/dashboard');
             }
         }
     }

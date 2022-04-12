@@ -75,8 +75,16 @@ class UsersController extends Controller
                 //if user exist then set the session
                 $this->session->set('id', $user->id);
                 $this->session->set('name', $user->name);
-                $this->session->set('refresh_token', $user->refresh_token);
-                $this->response->redirect('dashboard');
+                // die($user->access_token);
+                //Check if already connected the account of spotify
+                if ($user->access_token !== '') {
+                    //If yes, then set access token in session and redirect to the dashboard
+                    $this->session->access=['access_token' => $user->access_token];
+                    $this->response->redirect('dashboard');
+                } else {
+                    //else, redirect to connect page
+                    $this->response->redirect('connect');
+                }
             } else {
                 $this->view->message="Authentication failed!, wrong credentials";
             }

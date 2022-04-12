@@ -28,15 +28,25 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/">Search</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users/login">Login</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="/playlist/create">Create playlist</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/playlist">My playlists</a>
                         </li>
+                        <?php if (!isset($this->session->id)) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/login">Login</a>
+                        </li>
+                        <?php else : ?>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="/users/logout">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/dashboard"><?php echo $this->session->name ?></a>
+                            </li>
+                        <?php endif ?>
                     </ul>
                 </div>
             </div>
